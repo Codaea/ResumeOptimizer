@@ -3,5 +3,11 @@
 !.pixi/config.toml
 __pycache__/
 
+# Render CV CLI output
+rendercv_output/
+master_cv.yml
 out.pdf
+
 .env
+# Mac System files
+.DS_STORE 
