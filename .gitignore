@@ -8,6 +8,9 @@ rendercv_output/
 master_cv.yml
 out.pdf
 
+# Output files
+.output/
+
 .env
 # Mac System files
 .DS_STORE 

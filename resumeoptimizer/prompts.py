@@ -1,40 +1,45 @@
 summary = """
-You are writing a professional summary for the top of a resume.
-INSTRUCTIONS:
+Write a concise, impactful professional summary for the top of a resume, following these strict guidelines: the summary must be 2–3 short sentences and must not exceed 3 lines of text. This summary should introduce the candidate, highlight their most relevant strengths and qualifications, and clearly present their value, but must not reference or allude to any specific employer, company, or target job. The summary should appear as a standard, general-purpose resume section suitable for multiple roles, rather than being tailored or overtly targeted to a particular position or organization.
 
-Write a 2-3 sentence professional summary that:
+Before writing, carefully analyze the provided resume and any associated job requirements. Internally, reason through what sets the candidate apart—consider unique skills, standout achievements, and directly relevant strengths. Do not begin writing the summary until this internal analysis is complete.
 
-1. LEADS with credentials that match the role:
-   - Current role/status (e.g., "Computer Science student at Oregon State")
-   - Key technical areas (e.g., "specializing in backend systems and observability")
-   - Years of experience with relevant technologies if applicable
+- Focus on clear, succinct language appropriate for a “Summary” or “Profile” section of a resume.
+- Do not use bullet points, lists, formatting (such as bold or italics), or extraneous information—output plain text only.
+- Write in third person (unless otherwise specified).
+- The output must be a single, continuous response of 2–3 SHORT sentences (no sentence fragments), and must not exceed three lines in total length.
+- Prioritize brevity, impact, and general applicability. Avoid overly long or complex sentences, and do not include details that are specific to a particular employer or job posting.
+- Do not make overt or subtle references to any company, organization, or job title; keep the tone objective and professional.
+- Highlight only the most universally transferable strengths and qualifications.
 
-2. HIGHLIGHTS 1-2 impressive achievements present in the resume:
-   - Presentations/talks
-   - Known companies
-   - Significant projects
-   - Only mention if it's actually in the resume below
+# Steps
 
-3. CONNECTS to their ideal candidate description:
-   - Reference their company keywords naturally
-   - Frame experience in their language
-   - Align with the role type
+1. Thoroughly review the provided resume and, if applicable, job requirements.
+2. Identify the candidate’s most universally relevant qualifications, achievements, and skills.
+3. Internally reason through what makes the candidate stand out among peers.
+4. Write a summary in 2–3 short sentences, fitting within 3 lines, that communicates the candidate’s unique and broadly marketable value and strengths, without referencing any employer or job.
 
-WRITING STYLE:
-- Clear, confident, direct
-- No buzzwords or fluff ("passionate", "driven", "rockstar")  
-- Active voice, concrete nouns
-- Scannable in 3 seconds
+# Output Format
 
-AVOID:
-- Listing achievements better left for work experience bullets
-- Repeating the job description back to them
-- Generic statements ("team player", "fast learner")
-- Adverbs and qualifiers
+- Output only a plain-text summary consisting of 2–3 short sentences, not exceeding 3 lines.
+- Do not use any formatting, markdown, or bullet points.
+- Use first person (unless otherwise specified).
+- The summary should be concise, professional, and suitable as a general resume summary, not tailored to a specific company or job.
 
-The summary should make someone think "this person matches what we need" not "this person really wants this job."
+# Examples
 
-Output just the summary text, 2-3 sentences.
+**Example Input (resume excerpt):**
+- 5 years as marketing manager
+- Led team to 130% revenue growth in 2 years
+- Skilled in digital and content marketing
+- Certified HubSpot and Google Ads
+
+**Example Output:**  
+Experienced marketing manager with a strong record of driving revenue growth. Expertise in digital and content marketing, supported by leading industry certifications. Recognized for strategic leadership and delivering measurable results.
+
+*(Note: The summary above avoids any references to a specific organization or job, focusing only on skills and achievements. Actual outputs may be even more concise, depending on resume content.)*
+
+# Reminder
+First analyze and reason through the candidate’s resume and strengths internally. Only then, write a concise, general-purpose summary, ensuring all output is within the defined length and never references any specific company or job.
 """
 
 cv_to_resume = """
@@ -70,6 +75,9 @@ INSTRUCTIONS:
    - Quantified results where possible
    - Recognizable achievements (presentations, awards)
    - Technologies that match their critical skills
+
+5. FORMAT output as structured JSON:
+   - For start_date and end_date use YYYY-MM format. if currently employed, end_date should be an empty string.
 
 Remember: A tired recruiter is skimming. Make the relevant parts obvious.
 

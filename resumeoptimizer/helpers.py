@@ -1,8 +1,9 @@
-from openai import OpenAI
+from langfuse.openai import OpenAI # pyright: ignore[reportPrivateImportUsage]
 from .models import JobDetails, RelevantMaterial, BaseInfo
+from .prompts import summary, cv_to_resume, extract_job_details
 import rendercv
+import yaml
 from pathlib import Path
-import .prompts as prompts
 
 client = OpenAI()
 
@@ -14,14 +15,14 @@ def clarify_job_requirements(job_description: str) -> JobDetails:
         input=[
             {
                 "role": "system",
-                "content": prompts.extract_job_details
+                "content": extract_job_details
             },
             {
                 "role": "user",
                 "content": job_description
             }
-        ]
-        text_format=JobDetails
+        ],
+        text_format=JobDetails,
     )
 
     if response.output_parsed is None:
@@ -37,7 +38,7 @@ def pull_relevant_cv_material(source_cv_data: str, job_description_data: JobDeta
         input=[
             {
                 "role": "developer",
-                "content": prompts.cv_to_resume
+                "content": cv_to_resume
             },
             {
                 "role": "user",
@@ -63,7 +64,7 @@ def generate_professional_summary(relevant_material: RelevantMaterial, job_detai
         input=[
             {
                 "role": "developer",
-                "content": prompts.summary
+                "content": summary
             },
             {
                 "role": "user",
@@ -100,16 +101,32 @@ def build_optimized_resume(base_info: BaseInfo, relevant_material: RelevantMater
     # Append relevant material sections
     
     cv_data['cv']['sections']['education'] = [entry.model_dump() for entry in relevant_material.Education]
-    cv_data['cv']['sections']['work experience'] = [entry.model_dump() for entry in relevant_material.WorkExperience]
+    # Convert empty string end_date to None for work experience entries
+
+    def clean_end_date(entry):
+        data = entry.model_dump()
+        if 'end_date' in data and data['end_date'] == "":
+            data['end_date'] = None
+        return data
+
+    cv_data['cv']['sections']['work experience'] = [clean_end_date(entry) for entry in relevant_material.WorkExperience]
     cv_data['cv']['sections']['projects'] = [entry.model_dump() for entry in relevant_material.Projects]
     cv_data['cv']['sections']['skills'] = [entry.model_dump() for entry in relevant_material.Skills]
 
-    print(cv_data)
     print("Generating PDF...")
     # build cv dict into pdf
     try: 
-        rendercv.api.create_a_pdf_from_a_python_dictionary(cv_data, Path("out.pdf"))
+        dump_to_yaml(cv_data, Path(".output/resume.yaml"))
+        rendercv.api.create_a_pdf_from_a_python_dictionary(cv_data, Path(".output/resume.pdf"))
+        print("PDF generated successfully.")
+        ## copy the yaml file too for reference
     except Exception as e:
         print(f"Error generating PDF: {e}")
         import traceback
         traceback.print_exc()
+
+
+def dump_to_yaml(data: dict, output_path: Path):
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(output_path, 'w') as f:
+        yaml.dump(data, f)

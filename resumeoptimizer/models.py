@@ -37,6 +37,8 @@ class WorkExperience(BaseModel):
     company: str
     position: str
     location: str
+    start_date: str = Field(description="YYYY-MM")
+    end_date: str = Field(description="YYYY-MM or empty if present")
     highlights: list[str] = Field(description="List of bullet points describing key achievements and responsibilities.")
 
 class Education(BaseModel):
